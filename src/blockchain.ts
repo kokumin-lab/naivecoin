@@ -69,9 +69,11 @@ const DIFFICULTY_ADJUSTMENT_INTERVAL: number = 10;
 const getDifficulty = (aBlockchain: Block[]): number => {
     const latestBlock: Block = aBlockchain[blockchain.length - 1];
     if (latestBlock.index % DIFFICULTY_ADJUSTMENT_INTERVAL === 0 && latestBlock.index !== 0) {
-        return getAdjustedDifficulty(latestBlock, aBlockchain);
+        return 16;
+        //return getAdjustedDifficulty(latestBlock, aBlockchain);
     } else {
-        return latestBlock.difficulty;
+        return 16;
+        //return latestBlock.difficulty;
     }
 };
 
