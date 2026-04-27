@@ -69,11 +69,9 @@ const DIFFICULTY_ADJUSTMENT_INTERVAL: number = 10;
 const getDifficulty = (aBlockchain: Block[]): number => {
     const latestBlock: Block = aBlockchain[blockchain.length - 1];
     if (latestBlock.index % DIFFICULTY_ADJUSTMENT_INTERVAL === 0 && latestBlock.index !== 0) {
-        return 16;
-        //return getAdjustedDifficulty(latestBlock, aBlockchain);
+        return getAdjustedDifficulty(latestBlock, aBlockchain);
     } else {
-        return 16;
-        //return latestBlock.difficulty;
+        return latestBlock.difficulty;
     }
 };
 
@@ -93,7 +91,7 @@ const getAdjustedDifficulty = (latestBlock: Block, aBlockchain: Block[]) => {
 const getCurrentTimestamp = (): number => Math.round(new Date().getTime() / 1000);
 
 const generateRawNextBlock = (blockData: Transaction[]) => {
-    const previousBlock: Block = getLatestBlock();
+    const previousBlock = getLatestBlock();
     const difficulty: number = getDifficulty(getBlockchain());
     const nextIndex: number = previousBlock.index + 1;
     const nextTimestamp: number = getCurrentTimestamp();

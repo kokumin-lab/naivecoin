@@ -1,0 +1,10 @@
+#!/bin/bash
+script="$0"
+if [ $# -ne 2 ]; then
+    echo "$script は node2 から指定アドレスにNaiveCoinを指定枚数送ります。"
+    echo "使い方：$script \"アドレス\" 枚数"
+else
+    addr="$1"
+    mnt=$2
+    curl -X http://localhost:3001/sendTransaction -H "Content-Type=application/json" -d '{"address":$addr, "mount":$mnt}'
+fi

@@ -1,0 +1,41 @@
+#!/bin/bash
+
+# 引数チェック
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 <IPv4 address>"
+    echo "引数としてIPv4アドレスを1つだけ指定してください。"
+    exit 1
+fi
+
+ip="$1"
+
+# IPv4形式チェック
+is_ipv4() {
+    local ip="$1"
+    [[ $ip =~ ^([0-9]{1,3}\.){3}[0-9]{1,3}$ ]] || return 1
+    IFS='.' read -r o1 o2 o3 o4 <<< "$ip"
+    for o in $o1 $o2 $o3 $o4; do
+        (( o >= 0 && o <= 255 )) || return 1
+    done
+    return 0
+}
+
+if ! is_ipv4 "$ip"; then
+    echo "Error: 不正なIPv4アドレスです → $ip"
+    echo "正しい形式[192.168.xxx.xxx]のIPv4アドレスを指定してください。"
+    exit 1
+fi
+
+# 端末存在チェック
+if ! ping -c 1 -W 1 "$ip" > /dev/null 2>&1; then
+    echo "Error: $ip は応答しません"
+    echo "IPアドレスが間違っていないか確認してください。"
+    exit 1
+fi
+
+echo "OK: $ip は有効です。p2p接続を開始します。"
+
+# --- p2p 接続処理 ---
+# ./p2p_program "$ip"
+echo curl -X POST http://localhost:3001/addPeer -H "Content-Type:application/json" -d "{\"peer\":\"ws:$ip:6001\"}"
+curl -X POST http://localhost:3001/addPeer -H "Content-Type:application/json" -d "{\"peer\":\"ws://$ip:6001\"}"
