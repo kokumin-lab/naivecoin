@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# 引数チェック
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 <>"
+    echo "引数を指定してください。"
+    exit 1
+fi
+
+arg1="$1"
+
+# 引数チェック
+chk_arg1() {
+    local arg1="$1"
+    [[ $arg1 =~ ^regexp$ ]] || return 1
+    return 0
+}
+
+if ! chk_arg1 "$arg1"; then
+    echo "Error: 引数が間違っています。 → $arg1"
+    echo "正しい形式の引数を指定してください。"
+    exit 1
+fi
+
+# --- 処理開始 ---
+
+# --- 処理終了 ---
+
+
+

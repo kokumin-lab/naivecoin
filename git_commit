@@ -1,0 +1,41 @@
+#!/bin/bash
+
+# 引数チェック
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 <commit memo>"
+    echo "コミットに付けるメモを指定してください。"
+    exit 1
+fi
+
+arg1="$1"
+
+# 引数チェック
+chk_arg1() {
+    local arg1="$1"
+    [[ $arg1 =~ ^.+$ ]] || return 1
+    return 0
+}
+
+if ! chk_arg1 "$arg1"; then
+    echo "Error: 引数が間違っています。 → $arg1"
+    echo "正しい形式の引数を指定してください。"
+    exit 1
+fi
+
+# --- 処理開始 ---
+# 1. 念のためnaivecoinのディレクトリにいるか確認
+cd ~/dev/naivecoin
+
+# 2. 変更されたファイル（main.ts や package.json など）を確認
+git status
+
+# 3. 変更したすべてのファイルをステージング（コミット対象）に追加
+git add .
+
+# 4. 変更内容のメッセージを付けてローカルに記録（コミット）
+git commit -m "Webページ連携のためのCORS対応とcorsライブラリの追加"
+
+# 5. GitHub（リモートリポジトリ）に送信
+git push origin main
+
+# --- 処理終了 ---

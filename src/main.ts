@@ -1,6 +1,7 @@
 import * as  bodyParser from 'body-parser';
 import * as express from 'express';
 import * as _ from 'lodash';
+const cors = require('cors'); //修正後: 以下のように require を使って直接読み込みます
 import {
     Block, generateNextBlock, generatenextBlockWithTransaction, generateRawNextBlock, getAccountBalance,
     getBlockchain, getMyUnspentTransactionOutputs, getUnspentTxOuts, sendTransaction
@@ -15,6 +16,7 @@ const p2pPort: number = parseInt(process.env.P2P_PORT) || 6001;
 
 const initHttpServer = (myHttpPort: number) => {
     const app = express();
+    app.use(cors()); // ★2. これを他の app.use より「前」に追記します！
     app.use(bodyParser.json());
 
     app.use((err, req, res, next) => {
